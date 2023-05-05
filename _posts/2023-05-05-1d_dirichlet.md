@@ -85,6 +85,7 @@
 $$
 0.01*max(v, 1)\triangledown^2v=3x^3\\BC: v|_{x=0,x=2}=0
 $$
+
 [MaterialADConverter](https://mooseframework.inl.gov/source/materials/MaterialADConverter.html)实现`regular material`和`AD material`属性的转变。
 
 ![image-20230104150742632](/Users/wangzhaohao/Library/Application Support/typora-user-images/image-20230104150742632.png)
@@ -93,7 +94,7 @@ $$
 
 ```C++
 [Mesh]
-	type = GeneratedMesh
+  type = GeneratedMesh
   dim = 2
   nx = 2
   ny = 2
@@ -101,13 +102,13 @@ $$
 []
 
 [Variables]
-	[u]
-		initial_condition = 1
-	[]
-	[v]
-		initial_condition = 1
-		order = SECOND
-	[]
+  [u]
+    initial_condition = 1
+  []
+  [v]
+    initial_condition = 1
+    order = SECOND
+  []
 []
 
 [Kernels]
