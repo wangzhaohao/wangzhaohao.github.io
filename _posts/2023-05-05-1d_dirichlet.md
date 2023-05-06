@@ -182,7 +182,7 @@ $$
 $$
 (1.0+u^2*v^3)*\triangledown^2u=0\\(1.0+u^2*v^3)*\triangledown^2v=0\\
                                BC:u|_{left}=0 \quad u|_{right}=1\\v|_{left}=1\quad v|_{right} = 0
-    $$
+$$
 ![image-20230104190215616](/Users/wangzhaohao/Library/Application Support/typora-user-images/image-20230104190215616.png)
 
 
@@ -353,7 +353,7 @@ $$
     show_material_properties = 'diffusivity'
   []
 []
-```
+ ```
 
 **ADStatefulMaterial**是**diffusivity = diffusivity_old2.0u**。**diffusivity_old**默认是0.5
     $$
@@ -373,21 +373,21 @@ $$
     nz = 0
     elem_type = QUAD4
     []
-
+    
     [Variables]
     [u]
     order = FIRST
     family = LAGRANGE
     []
     []
-
+    
     [Kernels]
     [diff1]
     type = ADDiffusion
     variable = u
     []
     []
-
+    
     [BCs]
     [left_u]
     type = DirichletBC
@@ -402,7 +402,7 @@ $$
     value = 1
     []
     []
-
+    
     [Materials]
     [m1]
     type = ADPiecewiseLinearInterpolationMaterial
@@ -423,17 +423,17 @@ $$
     outputs = all
     []
     []
-
+    
     [Executioner]
     type = Steady
     solve_type = 'PJFNK'
     []
-
+    
     [Outputs]
     exodus = true
     []
     ```
-
+    
     **ADPiecewiseLinearInterpolationMaterial**使用依赖于变量的线性插值函数来计算材料属性。材料计算使用*f(x)*计算，其中x是和位置相关的变量值。其实就是xy线性插值函数，u是自变量。比如代码中*f(x)=x,x[0,1],variable=u*，就是*f(u)=u,u[0,1]*
 
 ![image-20230107180454833](/Users/wangzhaohao/Library/Application Support/typora-user-images/image-20230107180454833.png)
@@ -442,56 +442,55 @@ $$
 
 ## bnd_coupling_vol.i
 
-    ```C++
     [Mesh]
-    type = GeneratedMesh
-    dim = 2
-    xmin = 0
-    xmax = 1
-    ymin = 0
-    ymax = 1
-    nx = 4
-    ny = 4
-    elem_type = QUAD9
+    	type = GeneratedMesh
+    	dim = 2
+    	xmin = 0
+    	xmax = 1
+    	ymin = 0
+    	ymax = 1
+    	nx = 4
+    	ny = 4
+    	elem_type = QUAD9
     []
-
+    
     [Functions]
-    [ecact_fn]
-    type = ParsedFunction
-    value = x*x+y*y
+    	[ecact_fn]
+    		type = ParsedFunction
+    		expression = x*x+y*y
+    	[]
+    
+    	[f_fn]
+    		type = ParsedFunction
+    		expression = -4*3+x*x+y*y
+    	[]
     []
-
-    [f_fn]
-    type = ParsedFunction
-    value = -4*3+x*x+y*y
-    []
-    []
-
+    
     [Variables]
-    [u]
-    family = LAGRANGE
-    order = SECOND
+    	[u]
+    		family = LAGRANGE
+    		order = SECOND
+    	[]
     []
-    []
-
+    
     [Kernels]
-    [diff]
-    type = DiffusionKernel
-    variable = u
-    offset = 0
-    mat_prop = k3vol
+    	[diff]
+    		type = DiffusionKernel
+    		variable = u
+    		offset = 0
+    		mat_prop = k3vol
+    	[]
+    	[r]
+    		type = Reaction
+    		variable = u
+    	[]
+    	[ffn]
+    		type = BodyForce
+    		variable = u
+    		function = f_fn
+    	[]
     []
-    [r]
-    type = Reaction
-    variable = u
-    []
-    [ffn]
-    type = BodyForce
-    variable = u
-    function = f_fn
-    []
-    []
-
+    
     [BCs]
     [all]
     type = MatDivergenceBC
@@ -500,7 +499,7 @@ $$
     boundary = 'left right top bottom'
     []
     []
-
+    
     [Materials]
     [k1vol]
     type = GenericConstantMaterial
@@ -526,23 +525,23 @@ $$
     mp1 = k1vol
     mp2 = k2vol
     block = 0
-
+    
     val1 = 1
     val2 = 2
     []
-
+    
     [k3bnd]
     type = SumMaterial
     sum_prop_name = 'k3bnd'
     mp1 = k1vol
     mp2 = k2bnd
     boundary = 'left right top bottom'
-
+    
     val1 = 1
     val2 = 2
     []
     []
-
+    
     [Postprocessors]
     [12err]
     type = ElementL2Error
@@ -550,29 +549,29 @@ $$
     function = exact_fn
     []
     []
-
+    
     [Executioner]
     type = Steady
     solve_type = NEWTON
-
+    
     petsc_options_iname = '-pc_type'
     petsc_options_value = 'lu'
     []
-
+    
     [Outputs]
     execute_on = 'timestep_end'
     exodus = true
     []
     ```
-
+    
     $$
     k\triangledown^2u+u-f=0\\f=-4*3+x^2+y^2
     $$
-
+    
     其中$u=x^2+y^2$，k=3，其中设置`k3vol = k1vol+k2vol`，其中`k1vol=1 k2vol = 2`，边界上的`k3bnd = k1vol+k2bnd`
-
+    
     **DiffMkernel**中
-
+    
     ```C++
     params.addParam<Real>("offset", 4.0, "Offset on residual evaluation");
 DiffMKernel::computeQpResidual()
@@ -715,7 +714,7 @@ CoefDiffusion::computeQpResidual()
     ny = 4
     elem_type = QUAD9
     []
-
+    
     [Functions]
     [linear_x]
     type = ADParsedFunction
@@ -728,7 +727,7 @@ CoefDiffusion::computeQpResidual()
     axis = 'x'
     []
     []
-
+    
     [Variables]
     [u]
     family = MONOMIAL
@@ -736,7 +735,7 @@ CoefDiffusion::computeQpResidual()
     fv = true
     []
     []
-
+    
     [FVKernels]
     [diff]
     type = FVDiffusion
@@ -749,7 +748,7 @@ CoefDiffusion::computeQpResidual()
     variable = u
     []
     []
-
+    
     [FVBCs]
     [all]
     type = FVDirichletBC
@@ -758,7 +757,7 @@ CoefDiffusion::computeQpResidual()
     value = 1
     []
     []
-
+    
     [Materials]
     active = 'k1'
     [k1]
@@ -774,21 +773,21 @@ CoefDiffusion::computeQpResidual()
     block = 0
     []
     []
-
+    
     [Executioner]
     type = Steady
     solve_type = NEWTON
-
+    
     petsc_options_iname = '-pc_type'
     petsc_options_value = 'lu'
     []
-
+    
     [Outputs]
     execute_on = 'timestep_end'
     exodus = true
     []
     ```
-
+    
     **FVDiffusion**是采用有限体积（**FVB**）计算方法。
     $$
     -\triangledown \cdot D\triangledown u = 0 \in \Omega
@@ -798,7 +797,7 @@ CoefDiffusion::computeQpResidual()
     \int_{element} - \triangledown \cdot D \triangledown u = \sum_{elemenfacesf} -D_f \triangledown u_f \cdot \vec{n}_{f}area_f
     $$
     其中$D_f$有两种形式，一种是**Simple arithmetic average**， $D_f = w_1D_1+(1-w_1)D_2$，另一种是**Simple harmonic average**，$D_f = \frac{1}{\frac{w_1}{D_1}+\frac{1-w_1}{D_2}}$。相关设置在**coeff_interp_method**。
-
+    
     **ADPiecewiseLinear**等于PiecewiseLinear，是线性插值x和y之间的数据。设置**axis**可以修改x变量的默认（时间t），改为x，y，z。
 
 ![image-20230110221653728](/Users/wangzhaohao/Library/Application Support/typora-user-images/image-20230110221653728.png)
@@ -816,7 +815,7 @@ CoefDiffusion::computeQpResidual()
     ny = 5
     []
     []
-
+    
     [Variables]
     [u]
     initial_condition = 0.1
@@ -825,7 +824,7 @@ CoefDiffusion::computeQpResidual()
     initial_condition = 0.1
     []
     []
-
+    
     [Materials]
     [Du]
     type = ADCoupledValueFunctionMaterial
@@ -840,7 +839,7 @@ CoefDiffusion::computeQpResidual()
     prop_name = Dv
     []
     []
-
+    
     [Kernels]
     [diff_u]
     type = ADMatDiffusion
@@ -860,7 +859,7 @@ CoefDiffusion::computeQpResidual()
     type = ADTimeDerivative
     variable = v
     []
-
+    
     [BCs]
     [u_left]
     type = DirichletBC
@@ -887,21 +886,21 @@ CoefDiffusion::computeQpResidual()
     value = 0.1
     []
     []
-
+    
     [Executioner]
     type = Transient
     solve_type = NEWTON
     dt = 0.1
     num_steps = 4
     []
-
+    
     [Outputs]
     exodus = true
     []
     ```
-
+    
     **ADCoupledValueFunctionMaterial**是将变量$v$等于<u>function</u>中的自变量。
-
+    
     ```C++
     template <bool is_ad>
 void CoupledValueFunctionMaterialTempl<is_ad>::computeQpProperties()
@@ -917,7 +916,7 @@ void CoupledValueFunctionMaterialTempl<is_ad>::computeQpProperties()
         else
             t = (*_vals[i])[_qp];
     }
-
+    
     _prop[_qp] = _function.value(t, p);
 }
 ```
@@ -1031,13 +1030,13 @@ exodus = true
     block_id = 10
     []
     []
-
+    
     [Variables]
     [u]
     initial_condition = 2
     []
     []
-
+    
     [Kernels]
     [diff]
     type = MatDiffusionTest
@@ -1045,7 +1044,7 @@ exodus = true
     prop_name = 'p'
     []
     []
-
+    
     [BCs]
     [left]
     type = DirichletBC
@@ -1060,7 +1059,7 @@ exodus = true
     value = 3
     []
     []
-
+    
     [Materials]
     [all]
     type = GenericConstantMaterial
@@ -1069,7 +1068,7 @@ exodus = true
     block = ANY_BLOCL_ID
     outputs = all
     []
-
+    
     [left]
     type = GenericConstantMaterial
     prop_names = 'f f_prime p'
@@ -1078,32 +1077,32 @@ exodus = true
     outputs = all
     []
     []
-
+    
     [Executioner]
     type = Steady
     solve_type = PJFNK
     petsc_options_iname = '-pc_type -pc_hypre_type'
     petsc_opitons_value = 'hypre boomerame'
     []
-
+    
     [Outputs]
     print_linear_residuals = true
     perf_graph = true
     []
     ```
-
+    
     **SubdomainBoundingBoxGenerator**
-
+    
     制定框内或者框外的subdomian **ID**。
-
+    
     **ANY_BLOCK_ID**是全局定义的一个变量，应该是所有的id-1。
-
+    
     测试发现此输入卡并不能运行，错误
-
+    
     ```
     *** ERROR ***
     The following error occurred in the object "MOOSE Problem", of type "FEProblem".
-
+    
     The following material properties are declared on block 10 by multiple materials:
     Material Property             Material Objects
     f                             all left
@@ -1120,12 +1119,12 @@ exodus = true
     type = GeneratedMesh
     dim = 1
     []
-
+    
     [Variables]
     [u]
     []
     []
-
+    
     [Kernels]
     [diff]
     type = ADMatDiffusion
@@ -1133,7 +1132,7 @@ exodus = true
     diffusivity = F
     []
     []
-
+    
     [Materials]
     [time_no_ad]
     type = GenericFunctionMaterial
@@ -1146,7 +1145,7 @@ exodus = true
     reg_props_in = time_no_ad
     ad_props_out = time
     []
-
+    
     [F]
     type = ADDerivativeParsedMaterial
     f_name = F
@@ -1158,19 +1157,19 @@ exodus = true
     evalerror_behavior = nan 
     []
     []
-
+    
     [Executioner]
     type = Transient
     num_steps = 2
     []
     ```
-
+    
     **ADDerivativeParsedMaterial**
-
+    
     是Parsed funtion的派生，继承了原来的**ParseMaterial**加上自动求导功能。
-
+    
     <u>material_property_names</u>参数
-
+    
     |         表达式         |                             解释                             |
     | :--------------------: | :----------------------------------------------------------: |
     |           F            |               定义材料属性*F*，没有和变量相关                |
@@ -1187,12 +1186,12 @@ exodus = true
     nx = 1
     ny = 1
     []
-
+    
     [AuxVariables]
     [dummy]
     []
     []
-
+    
     [Materials]
     [provider]
     type = ADDerivativeMaterialInterfaceTestProvider
@@ -1210,7 +1209,7 @@ exodus = true
     block = 0
     outputs = exodus
     []
-
+    
     [dummy]
     type = ADGenericConstantMaterial
     prop_names = prop
@@ -1218,15 +1217,15 @@ exodus = true
     prop_values = 0
     []
     []
-
+    
     [Executioner]
     type = Steady
     []
-
+    
     [Problem]
     type = false
     []
-
+    
     [Outputs]
     exodus = true
     []
