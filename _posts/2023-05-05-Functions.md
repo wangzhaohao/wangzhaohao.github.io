@@ -7,49 +7,49 @@
 
 ```C++
 [Mesh]
-	type = GeneratedMesh
-	dim = 1
+  type = GeneratedMesh
+  dim = 1
 []
 
 [Variables]
-	[dummy]
-	[]
+  [dummy]
+  []
 []
 
 [Problem]
-	solve = false
-	kernel_converage_check = false
+  solve = false
+  kernel_converage_check = false
 []
 
 [Functions]
-	[input]
-		type = CoarsenedPiecewiseLinear
-		data_file = input.csv
-		format = columns
-		epsilon = 0.1
-		x_scale = 0.03
-	[]
+  [input]
+    type = CoarsenedPiecewiseLinear
+    data_file = input.csv
+    format = columns
+    epsilon = 0.1
+    x_scale = 0.03
+  []
 []
 
 [VectorPostprocessors]
-	[F]
-		type = PiecewiseFunctionTabulate
-		function = input
-		execute_on = INITIAL
-		outputs = vpp
-	[]
+  [F]
+    type = PiecewiseFunctionTabulate
+    function = input
+    execute_on = INITIAL
+    outputs = vpp
+  []
 []
 
 [Executioner]
-	type = Transient
-	num_steps = 1
+  type = Transient
+  num_steps = 1
 []
 
 [Outputs]
-	[vpp]
-		type = CSV
-		excute_vector_postprocessors_on = INITIAL
-	[]
+  [vpp]
+    type = CSV
+    excute_vector_postprocessors_on = INITIAL
+  []
 []
 ```
 
@@ -64,7 +64,7 @@
 #include "PiecewiseLinearBase.h"
 class CoarsenedPiecewiseLinear : public PiecewiseLinearBase
 {
-  public:
+public:
   static InputParameters validParams();
   CoarsendPiecewiseLinear(const InputParameters & parameters);
 };
@@ -96,7 +96,7 @@ CoarsenedPiecewiseLinear::CoarsenedPiecewiseLinear(const InputParamters & paramt
     const Real x_scale = getParam<Real>("x_scale");
     const Real y_scale = getParam<Real>("y_scale");
     const Real epsilon = getParam<Real>("epsilon");
-    
+
     PointReduction::FunctionNodeList list;
     list.reserve(_raw_x.size());
     for (MooseIndex(_raw_x) i = 0; i < _raw_x.size(); ++i)
@@ -104,7 +104,7 @@ CoarsenedPiecewiseLinear::CoarsenedPiecewiseLinear(const InputParamters & paramt
     _console << "Reduced size for function" << name() << "form " << list.size();
     list = PointReduction::douglasPeucker(list, epsilon);
     _console << "to " << list.size() << "points" << std::endl;
-    
+
     _raw_x.resize(list.size());
     _raw_y.resize(list.size());
     for (MooseIndex(list) i = 0; i < list.size(); ++i)
@@ -122,73 +122,72 @@ CoarsenedPiecewiseLinear::CoarsenedPiecewiseLinear(const InputParamters & paramt
 
 ```C++
 [Mesh]
-	type = GeneratedMesh
-	dim = 2
-	xmin = -1
-	xmax = 1
-	ymin = -1
-	ymx = 1
-	nx = 4
-	ny = 4
-	elem_type = QUAD4
+  type = GeneratedMesh
+  dim = 2
+  xmin = -1
+  xmax = 1
+  ymin = -1
+  ymx = 1
+  nx = 4
+  ny = 4
+  elem_type = QUAD4
 []
 
 [Functions]
-	[bc_fn]
-		type = ParsedFunction
-		expression = 'x*x+y*y'
-	[]
-	
-	[icfn]
-		type = ConstantFunction
-		value = 1
-	[]
-	[ffn]
-		type = ConstantFunction
-		value = -4
-	[]
+  [bc_fn]
+    type = ParsedFunction
+    expression = 'x*x+y*y'
+  []
+
+  [icfn]
+    type = ConstantFunction
+    value = 1
+  []
+  [ffn]
+    type = ConstantFunction
+    value = -4
+  []
 []
 
 [Variables]
-	[u]
-		order = FIRST
-		family = LAGRANGE
-		[InitalCondition]
-			type = FunctionIC
-			function = icfn
-		[]
-	[]
+  [u]
+    order = FIRST
+    family = LAGRANGE
+    [InitalCondition]
+    type = FunctionIC
+    function = icfn
+  []
 []
 
 [Kernels]
-	#Coupling of nonlinear to Aux
-	[diff]
-		type = Diffusion
-		variable = u
-	[]
-	[force]
-		type = BodyForce
-		variable = u
-		function = ffn
-	[]
+  #Coupling of nonlinear to Aux
+  [diff]
+    type = Diffusion
+    variable = u
+  []
+  [force]
+    type = BodyForce
+    variable = u
+    function = ffn
+  []
 []
 
 [BCs]
-	[all]
-		type = FunctionDirichletBC
-		variable = u
-		boundary = '0 1 2 3'
-		function = bc_fn
-	[]
+  [all]
+    type = FunctionDirichletBC
+    variable = u
+    boundary = '0 1 2 3'
+    function = bc_fn
+  []
 []
 
 [Executioner]
-	type = Steady
-	solve_type = 'PJFNK'
+  type = Steady
+  solve_type = 'PJFNK'
 []
 
 [Outputs]
-	exodus = true
+  exodus = true
 []
 ```
 
@@ -200,7 +199,7 @@ CoarsenedPiecewiseLinear::CoarsenedPiecewiseLinear(const InputParamters & paramt
 //.h
 class ConstantFunction : public Function
 {
-  public:
+public:
   static InputParamters validParams();
   ConstantFunction(const InputParamters & parameters);
   using Function::value;
@@ -208,7 +207,7 @@ class ConstantFunction : public Function
   virtual ADReal value(const ADReal t, const ADPoint & p) const override;
   virtual Real timeDerivative(Real t, const Point & p) const override;
   virtual RealVectorValue gradient(Real t, const Point & p) const override;
-  protected:
+protected:
   const Real & _value;
 };
 
@@ -255,55 +254,55 @@ RealVectorValue ConstantFunction::gradient(Real /*t*/, const Point & /*p*/) cons
 
 ```C++
 [Mesh]
-	type = GeneratedMesh
-	dim = 2
-	nx = 10
-	ny = 10
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
 []
 
 [Variables]
-	[u]
-	[]
+  [u]
+  []
 []
 
 [Kernels]
-	[diff]
-		type = FuncCoefDiffusion
-		variable = u
-	[]
-	[time]
-		type = TimeDerivative
-		variable = u
-	[]
+  [diff]
+    type = FuncCoefDiffusion
+    variable = u
+  []
+  [time]
+    type = TimeDerivative
+    variable = u
+  []
 []
 
 [BCs]
-	[left]
-		type = DirichletBC
-		variable = u
-		boundary = left
-		value = 0
-	[]
-	
-	[right]
-		type = NeumannBC
-		variable = u
-		boundary = right
-		value = 1
-	[]
+  [left]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  []
+
+  [right]
+    type = NeumannBC
+    variable = u
+    boundary = right
+    value = 1
+  []
 []
 
 [Executioner]
-	type = Transient
-	num_steps = 10
-	dt = 0.1
-	solve_type = 'PJFNK'
-	petsc_options_inmae = '-pc_type -pc_hypre_type'
-	petsc_options_value = 'hypre boomeramg'
+  type = Transient
+  num_steps = 10
+  dt = 0.1
+  solve_type = 'PJFNK'
+  petsc_options_inmae = '-pc_type -pc_hypre_type'
+  petsc_options_value = 'hypre boomeramg'
 []
 
 [Outputs]
-	exodus = true
+  exodus = true
 []
 ```
 
@@ -313,10 +312,10 @@ RealVectorValue ConstantFunction::gradient(Real /*t*/, const Point & /*p*/) cons
 //.h
 class FuncCoefDiffusion : public Kernel
 {
-  public:
+public:
   static InputParameters validParams();
   FuncCoefDiffusion(const InputParameters & parameters);
-  protected:
+protected:
   virtual Real computeQpResidual();
   virtual Real computeQpJacobian();
   const Function & _function;
@@ -373,8 +372,8 @@ Real FuncCoefDiffusion::computeQpJacobian()
 # The values of the variables should correspong to the function
 # At time = 0, the variable = 0, at time = 1, variable = 4 and so on
 [Mesh]
-	file = cube.e
-	parllel_type = replicated
+  file = cube.e
+  parllel_type = replicated
 []
 
 [Variables]
