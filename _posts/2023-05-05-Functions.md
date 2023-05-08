@@ -120,7 +120,7 @@ CoarsenedPiecewiseLinear::CoarsenedPiecewiseLinear(const InputParamters & paramt
 
 ## constant_function_test.i
 
-```C++
+```c++
 [Mesh]
   type = GeneratedMesh
   dim = 2
@@ -195,8 +195,8 @@ CoarsenedPiecewiseLinear::CoarsenedPiecewiseLinear(const InputParamters & paramt
 
 > Class that represents constant function.
 
-{% highlight C++ %}
-```C++
+{% highlight c++ %}
+```c++
 //.h
 class ConstantFunction : public Function
 {
@@ -254,7 +254,7 @@ RealVectorValue ConstantFunction::gradient(Real /*t*/, const Point & /*p*/) cons
 
 ## default_fuction.i
 
-```C++
+```c++
 [Mesh]
   type = GeneratedMesh
   dim = 2
@@ -310,7 +310,7 @@ RealVectorValue ConstantFunction::gradient(Real /*t*/, const Point & /*p*/) cons
 
 **FuncCoefDiffusion**是用于测试*MooseParsedFunctionInterface*
 
-```C++
+```c++
 //.h
 class FuncCoefDiffusion : public Kernel
 {
@@ -351,7 +351,7 @@ Real FuncCoefDiffusion::computeQpJacobian()
 
 ## function_file_format_test.i
 
-```C++
+```c++
 #This test the capability of the code to read input file in csv or space separated fomat.
 # thera ara four varaibles and four functions of the same name; a, b, c and d.
 # The diffusion eqations is "solved" for each of thse variables with a boundary condition 
@@ -511,7 +511,7 @@ Real FuncCoefDiffusion::computeQpJacobian()
 
 > Fuction which provides a piecewise continuous linear interpolation of a provided (x,y) point data set.
 
-```C++
+```c++
 //.h
 template <typename BaseClass>
 class PiecewiseLinearTempl : public BaseClass
