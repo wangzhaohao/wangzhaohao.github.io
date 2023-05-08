@@ -5,7 +5,7 @@
 
 ## coarsened_piecewise_linear.i
 
-```C++
+```c++
 [Mesh]
   type = GeneratedMesh
   dim = 1
@@ -59,7 +59,7 @@
 
 和<u>PiecewiseLInear</u>很像，除了使用Gamer-Dougias-Peuck 算法做了数据的缩减。
 
-```C++
+```c++
 //.h
 #include "PiecewiseLinearBase.h"
 class CoarsenedPiecewiseLinear : public PiecewiseLinearBase
