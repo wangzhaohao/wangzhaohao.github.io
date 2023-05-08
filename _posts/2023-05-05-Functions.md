@@ -377,131 +377,131 @@ Real FuncCoefDiffusion::computeQpJacobian()
 []
 
 [Variables]
-	[a]
-	[]
-	[b]
-	[]
-	[c]
-	[]
-	[d]
-	[]
-	[e]
-	[]
-	[f]
-	[]
+  [a]
+  []
+  [b]
+  []
+  [c]
+  []
+  [d]
+  []
+  [e]
+  []
+  [f]
+  []
 []
 
 [Functions]
-	[a]
-		type = PiecewiseLinear
-		data_file = rows.csv
-		format = rows
-	[]
-	[b]
-		type = PecewiseLinear
-		date_file = columns.csv
-		foramte = columns
-	[]
-	[c]
-		type = PiecewiseLinear
-		data_file = row_space.dat
-		formate = rows
-	[]
-	[d]
-		type = PiecewiseLinear
-		data_file = columns_space.dat
-		formate = columns
-	[]
-	[e_func]
-		type = PiecewiseLinear
-		data_file = row_more_data.csv
-		format = rows
-		xy_in_file_only = false
-	[]
-	[f]
-		type = PiecewiseLinear
-		data_file = columns_more_data.csv
-		format = columns
-		xy_in_file_only = false
-	[]
+  [a]
+    type = PiecewiseLinear
+    data_file = rows.csv
+    format = rows
+  []
+  [b]
+    type = PecewiseLinear
+    date_file = columns.csv
+    foramte = columns
+  []
+  [c]
+    type = PiecewiseLinear
+    data_file = row_space.dat
+    formate = rows
+  []
+  [d]
+    type = PiecewiseLinear
+    data_file = columns_space.dat
+    formate = columns
+  []
+  [e_func]
+    type = PiecewiseLinear
+    data_file = row_more_data.csv
+    format = rows
+    xy_in_file_only = false
+  []
+  [f]
+    type = PiecewiseLinear
+    data_file = columns_more_data.csv
+    format = columns
+    xy_in_file_only = false
+  []
 []
 
 [Kernels]
-	[diffa]
-		type = Diffusion
-		variable = a
-	[]
-	[diffb]
-		type = Diffusion
-		variable = b
-	[]
-	[diffc]
-		type = Diffusion
-		variable = c
-	[]
-	[diffd]
-		type = Diffusion
-		variable = d
-	[]
-	[diffe]
-		type = Diffusion
-		variable = e
-	[]
-	[difff]
-		type = Diffusion
-		variable = f
-	[]
+  [diffa]
+    type = Diffusion
+    variable = a
+  []
+  [diffb]
+    type = Diffusion
+    variable = b
+  []
+  [diffc]
+    type = Diffusion
+    variable = c
+  []
+  [diffd]
+    type = Diffusion
+    variable = d
+  []
+  [diffe]
+    type = Diffusion
+    variable = e
+  []
+  [difff]
+    type = Diffusion
+    variable = f
+  []
 []
 
 [BCs]
-	[a]
-		type = FunctionDirichletBC
-		varaible = a
-		boundary = '1'
-		function = a
-	[]
-	[b]
-		type = FunctionDirichletBC
-		varaiable = b
-		boundary = '1'
-		function = b
-	[]
-	[c]
-		type = FunctionDirichletBC
-		variable = c
-		boundary = '1'
-		function = c
-	[]
-	[d]
-		type = FunctionDirichletBC
-		variable = d
-		boundary = '1'
-		function = d
-	[]
-	[e]
-		type = FunctionDirichletBC
-		variable = e
-		boundary = '1'
-		function = e
-	[]
-	[f]
-		type = FunctionDirichletBC
-		variable = f
-		boundary = '1'
-		function = f
-	[]
+  [a]
+    type = FunctionDirichletBC
+    varaible = a
+    boundary = '1'
+    function = a
+  []
+  [b]
+    type = FunctionDirichletBC
+    varaiable = b
+    boundary = '1'
+    function = b
+  []
+  [c]
+    type = FunctionDirichletBC
+    variable = c
+    boundary = '1'
+    function = c
+  []
+  [d]
+    type = FunctionDirichletBC
+    variable = d
+    boundary = '1'
+    function = d
+  []
+  [e]
+    type = FunctionDirichletBC
+    variable = e
+    boundary = '1'
+    function = e
+  []
+  [f]
+    type = FunctionDirichletBC
+    variable = f
+    boundary = '1'
+    function = f
+  []
 []
 
 [Executioner]
-	type = Transient
-	dt = 0.5
-	end_time = 3
-	nl_rel_tol = 1e-12
+  type = Transient
+  dt = 0.5
+  end_time = 3
+  nl_rel_tol = 1e-12
 []
 
 [Outputs]
-	file_base = out
-	exodus = true
+  file_base = out
+  exodus = true
 []
 ```
 
@@ -514,16 +514,16 @@ Real FuncCoefDiffusion::computeQpJacobian()
 template <typename BaseClass>
 class PiecewiseLinearTempl : public BaseClass
 {
-  public:
+public:
   static InputParameters validParams();
   PiecewiseLinearTempl(const InputParameters & parameters);
 };
 class PiecewiseLinear : public PiecewiseLinearTempl<PiecewiseLinearBase>
 {
-  public:
+public:
   PiecewiseLinear(const InputParameters & params) : PiecewiseLinearTempl<PiecewiseLinearBase>(params)
   {
-  
+
   }
   static InputParameters validParams()
   {
