@@ -195,7 +195,7 @@ CoarsenedPiecewiseLinear::CoarsenedPiecewiseLinear(const InputParamters & paramt
 
 > Class that represents constant function.
 
-{% highlight c++ %}
+
 ```c++
 //.h
 class ConstantFunction : public Function
@@ -248,7 +248,6 @@ RealVectorValue ConstantFunction::gradient(Real /*t*/, const Point & /*p*/) cons
   return RealVactorValue(0);
 }
 ```
-{% endhightlight %}
 
 # default_function
 
