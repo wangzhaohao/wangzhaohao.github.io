@@ -1096,15 +1096,15 @@ void CoupledValueFunctionMaterialTempl<is_ad>::computeQpProperties()
 
 测试发现此输入卡并不能运行，错误
 
-``` c++
-    *** ERROR ***
-    The following error occurred in the object "MOOSE Problem", of type "FEProblem".
+```c++
+*** ERROR ***
+The following error occurred in the object "MOOSE Problem", of type "FEProblem".
 
-    The following material properties are declared on block 10 by multiple materials:
-    Material Property             Material Objects
-    f                             all left
-    f_prime                       all left
-    p                             all left
+The following material properties are declared on block 10 by multiple materials:
+Material Property             Material Objects
+f                             all left
+f_prime                       all left
+p                             all left
 ```
 
 # derivative_material_interface
