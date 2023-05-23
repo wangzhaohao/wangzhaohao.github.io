@@ -1,9 +1,8 @@
-<center>Functions
-</center>
+# Functions
 
-# coarsened_piecewise_linear
+## coarsened_piecewise_linear
 
-## coarsened_piecewise_linear.i
+### coarsened_piecewise_linear.i
 
 ```c++
 [Mesh]
@@ -59,7 +58,7 @@
 
 和<u>PiecewiseLInear</u>很像，除了使用Gamer-Dougias-Peuck 算法做了数据的缩减。
 
-```c++
+``` c++
 //.h
 #include "PiecewiseLinearBase.h"
 class CoarsenedPiecewiseLinear : public PiecewiseLinearBase
@@ -77,7 +76,7 @@ InputParemters CoarsenedPiecewiseLinear::validParams()
                             "then evalute using a linear interplation.");
   params.addParam<Real>("epsilon",
                        "Significant distance in function below wich points are considered removable noise");
-  params.addParam<Real>("y_scale", 
+  params.addParam<Real>("y_scale",
                        1.0,
                        "Scaling factor to apply to the function nodes for the purpose of"
                        "computing destance in the Douglas-Peucker point reduction algorithm."
@@ -116,9 +115,9 @@ CoarsenedPiecewiseLinear::CoarsenedPiecewiseLinear(const InputParamters & paramt
   }
 ```
 
-# constant_function
+## constant_function
 
-## constant_function_test.i
+### constant_function_test.i
 
 ```c++
 [Mesh]
@@ -195,8 +194,7 @@ CoarsenedPiecewiseLinear::CoarsenedPiecewiseLinear(const InputParamters & paramt
 
 > Class that represents constant function.
 
-{% highlight c++ %}
-```c++
+``` c++
 //.h
 class ConstantFunction : public Function
 {
@@ -248,13 +246,11 @@ RealVectorValue ConstantFunction::gradient(Real /*t*/, const Point & /*p*/) cons
   return RealVactorValue(0);
 }
 ```
-{% endhightlight %}
 
-# default_function
+## default_function
 
-## default_fuction.i
-wangzhaohao
-```c++
+### default_fuction.i
+``` c++
 [Mesh]
   type = GeneratedMesh
   dim = 2
@@ -310,7 +306,7 @@ wangzhaohao
 
 **FuncCoefDiffusion**是用于测试*MooseParsedFunctionInterface*
 
-```c++
+``` c++
 //.h
 class FuncCoefDiffusion : public Kernel
 {
@@ -347,11 +343,11 @@ Real FuncCoefDiffusion::computeQpJacobian()
 }
 ```
 
-# function_file_format
+## function_file_format
 
-## function_file_format_test.i
+### function_file_format_test.i
 
-```c++
+``` c++
 #This test the capability of the code to read input file in csv or space separated fomat.
 # thera ara four varaibles and four functions of the same name; a, b, c and d.
 # The diffusion eqations is "solved" for each of thse variables with a boundary condition 
@@ -511,7 +507,7 @@ Real FuncCoefDiffusion::computeQpJacobian()
 
 > Fuction which provides a piecewise continuous linear interpolation of a provided (x,y) point data set.
 
-```c++
+``` c++
 //.h
 template <typename BaseClass>
 class PiecewiseLinearTempl : public BaseClass
@@ -556,9 +552,9 @@ template class PiecewieLinearTempl<PiecewiseLinearBase>;
 template class PiecewiseLinearTempl<ADPiecewiseLinearBase>;
 ```
 
-# function_ic
+## function_ic
 
-## function_ic_test.i
+### function_ic_test.i
 
 ```
 [Mesh]
