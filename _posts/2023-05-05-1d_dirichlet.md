@@ -2,7 +2,7 @@
 
 ## 1d_dirichlet.i
 
-```C++
+``` c++
 [Mesh]
   type = GeneratedMesh
   dim = 1
