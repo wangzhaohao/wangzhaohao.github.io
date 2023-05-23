@@ -2,7 +2,6 @@
 
 ## 1d_dirichlet.i
 
-````
 ```c++
 [Mesh]
   type = GeneratedMesh
@@ -81,7 +80,6 @@
   exodus = true
 []
 ```
-````
 
 $$
 0.01*max(v, 1)\triangledown^2v=3x^3\\BC: v|_{x=0,x=2}=0
