@@ -523,7 +523,6 @@ $$
 其中thermal_conductivity来自于ADThermalConductivityTest。
 
 ADThermalConductivityTest
-
 ```C++
 //.h
 class ADThermalConductivityTest : public Material
@@ -561,7 +560,6 @@ void ADThermalConductivityTest::computeQpProperties()
     _diffusivity[_qp] = _temperature[_qp] * _c[_qp];
 }
 ```
-
 可以看出==热导率==等于输入的温度✖️c。$k=T\times c$。
 
 ## code_verification
@@ -663,19 +661,21 @@ $$
 
 ```C++
 //.h
+
 static InputParameters validParams();
 ElementL2Error(const InputParameters & parameters);
 virtual Real getValue() override;
 protected:
 virtual Real computeQpIntegral() override;
 const Function & _func;
+
 //.C
 InputParameters ElementL2Error::validParams()
 {
-    InputParameters params = ElementIntegralVariablePostprocessor::validParams();
-    params.addRequiredParam<FunctionName>("function", "The analytic aolution to compare against");
-    params.addClassDescription("Compute L2 error between a field variable and an analytical function");
-    return params;
+  InputParameters params = ElementIntegralVariablePostprocessor::validParams();
+  params.addRequiredParam<FunctionName>("function", "The analytic aolution to compare against");
+  params.addClassDescription("Compute L2 error between a field variable and an analytical function");
+  return params;
 }
 
 ElementL2Error::ElementL2Error(const InputParameters & parametres)
@@ -773,7 +773,7 @@ Real ElementL2Error::computeQpIntegral()//应该是计算每一个点上的误�
     variable = u
   []
   [h]
-  type = AverageElementSize
+    type = AverageElementSize
   []
 []
 
@@ -979,171 +979,171 @@ $$
 # with spatial location. It has constant thermal conducitivity. It is insulated ont the # left boundary and exposed to a constant temperature on the right.
 [Mesh]
   [geom]
-  type = GeneratedMeshGenerator
-  dim = 1
-  elem_type = EDGE2
-  nx = 1
+    type = GeneratedMeshGenerator
+    dim = 1
+    elem_type = EDGE2
+    nx = 1
   []
-  []
-  
-  [Variables]
+[]
+
+[Variables]
   [u]
-  order = FIRST
+    order = FIRST
   []
-  []
-  
-  [Functions]
+[]
+
+[Functions]
   [volumetric_heat]
-  type = Parsedfunction
-  symbol_names = 'q L beta'
-  symbol_values = '1200 1 0.1'
-  expression = 'q * (1-beta*x/L)'
+    type = Parsedfunction
+    symbol_names = 'q L beta'
+    symbol_values = '1200 1 0.1'
+    expression = 'q * (1-beta*x/L)'
   []
   [exact]
-  type = ParsedFunction
-  symbol_names = 'uo q k L beta'
-  symbol_values = '300 1200 1 1 0.1'
-  expression = 'uo+(0.5*q*L^2/k)*((1-(x/L)^2)-(1-(x/L)^3*beta/3)'
-          []
-          []
-  
-          [Kerneles]
-          [heatconduction]
-          type = HeatConduction
-          variable = u
-          []
-          [heatsource]
-          type = HeatSource
-          function = vloumteric_heat
-          variable = u
-          []
-          []
-  
-          [BCs]
-          [uo]
-          type = DirichletBC
-          boundary = right
-          variable = u
-  value = 300
+    type = ParsedFunction
+    symbol_names = 'uo q k L beta'
+    symbol_values = '300 1200 1 1 0.1'
+    expression = 'uo+(0.5*q*L^2/k)*((1-(x/L)^2)-(1-(x/L)^3*beta/3)'
+   []
+[]
+
+[Kerneles]
+  [heatconduction]
+    type = HeatConduction
+    variable = u
   []
+  [heatsource]
+    type = HeatSource
+    function = vloumteric_heat
+    variable = u
   []
-  
-  [Materials]
+[]
+
+[BCs]
+  [uo]
+    type = DirichletBC
+    boundary = right
+    variable = u
+    value = 300
+  []
+[]
+
+[Materials]
   [property]
-  type = GenericConstantMaterial
-  prop_names = 'density specific_heat thermal_conductivity'
-  prop_values = '1.0 1.0 1.0'
+    type = GenericConstantMaterial
+    prop_names = 'density specific_heat thermal_conductivity'
+    prop_values = '1.0 1.0 1.0'
   []
-  []
-  
-  [Executioner]
+[]
+
+[Executioner]
   type = Steady
-  []
-  
-  [Postprocessors]
+[]
+
+[Postprocessors]
   [error]
-  type = ElementL2Error
-  function = exact
-  variable = u
+    type = ElementL2Error
+    function = exact
+    variable = u
   []
   [h]
-  type = AveragElementSize
+    type = AveragElementSize
   []
-  []
-  
-  [Outputs]
+[]
+
+[Outputs]
   csv = true
-  []
-  ```
-  
-  和之前的类似，只是把体热源换成了一个和位置相关的函数。
-  $$
-  \triangledown^2u+1200\times(1-0.1x)=0 \\ BC:u_{right}= 300
-  $$
-  
-  ### cylindrical_test_no1.i
-  
-  ```C++
-  #An infinitely long hollow cylinder has an inner radius ri and outer radius ro. It has
-  # a constant thermal conductivity k and internal heat geneation q. It is allowed to reach 
-  # thermal eqqulibrium while being exposed to constant temperatures on its inside an out
-  # side bounaries: u(ri) = ui and u(r0) = uo.
-  [Mesh]
+[]
+```
+
+和之前的类似，只是把体热源换成了一个和位置相关的函数。
+$$
+\triangledown^2u+1200\times(1-0.1x)=0 \\ BC:u_{right}= 300
+$$
+
+### cylindrical_test_no1.i
+
+```C++
+#An infinitely long hollow cylinder has an inner radius ri and outer radius ro. It has
+# a constant thermal conductivity k and internal heat geneation q. It is allowed to reach 
+# thermal eqqulibrium while being exposed to constant temperatures on its inside an out
+# side bounaries: u(ri) = ui and u(r0) = uo.
+[Mesh]
   [geom]
-  type = GneratedMeshGenerator
-  dim = 1
-  elem_type = EDGE2
-  xmin = 0.2
-  nx = 4
+    type = GneratedMeshGenerator
+    dim = 1
+    elem_type = EDGE2
+    xmin = 0.2
+    nx = 4
   []
-  []
-  
-  [Variables]
+[]
+
+[Variables]
   [u]
-  order = FIRST
+    order = FIRST
   []
-  []
-  
-  [Problem]
+[]
+
+[Problem]
   coord_type = RZ #later should in Mesh
-  []
-  
-  [Functions]
+[]
+
+[Functions]
   [exact]
-  type = ParsedFunction
-  symbol_names = 'ri r0 ui uo'
-  symbol_values = '0.2 1.0 300 0'
-  expression = '(uo*log(ri)-ui*log(ro)+(ui-u0)*log(x))/log(ri/ro)'
+    type = ParsedFunction
+    symbol_names = 'ri r0 ui uo'
+    symbol_values = '0.2 1.0 300 0'
+    expression = '(uo*log(ri)-ui*log(ro)+(ui-u0)*log(x))/log(ri/ro)'
   []
-  []
-  
-  [Kernels]
+[]
+
+[Kernels]
   [heat]
-  type = HeatConduction
-  variable = u
+    type = HeatConduction
+    variable = u
   []
-  []
-  
-  [BCs]
+[]
+
+[BCs]
   [ui]
-  type = DirichletBC
-  boundary = left
-  varaible = u
-  value = 300
+    type = DirichletBC
+    boundary = left
+    varaible = u
+    value = 300
   []
   [uo]
-  type = DirichletBC
-  boundary = right
-  variable = u
-  value = 0
+    type = DirichletBC
+    boundary = right
+    variable = u
+    value = 0
   []
-  []
-  
-  [Materials]
+[]
+
+[Materials]
   [property]
-  type = GenericConstantMaterial
-  prop_names = 'density specific_heat thermal_conductivity'
-  prop_values = '1.0 1.0 5.0'
+    type = GenericConstantMaterial
+    prop_names = 'density specific_heat thermal_conductivity'
+    prop_values = '1.0 1.0 5.0'
   []
-  []
-  
-  [Executioner]
+[]
+
+[Executioner]
   type = Steady
-  []
-  
-  [Postprocessors]
+[]
+
+[Postprocessors]
   [error]
-  type = ElementL2Error
-  variable = u
-  function = exact
+    type = ElementL2Error
+    variable = u
+    function = exact
   []
   [h]
-  type = AverageElementSize
+    type = AverageElementSize
   []
-  []
-  
-  [Outputs]
+[]
+
+[Outputs]
   csv = true
-  []
-  ```
-  
+[]
+```
+
